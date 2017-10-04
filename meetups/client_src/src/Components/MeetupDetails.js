@@ -17,8 +17,15 @@ class MeetupDetails extends Component {
 	getMeetUps() {
 		let meetupId = this.props.match.params.id;
 		let promise = axios.get(`http://localhost:3000/api/meetups/${meetupId}`);
-		promise.then( res => this.setState({details:res.data}, () => console.log(this.state)))
+		promise.then( res => this.setState({details:res.data}))
 					 .catch(err => console.log(err));
+	}
+
+	onDelete() {
+		let meetupId = this.state.details.id;
+		axios.delete(`http://localhost:3000/api/meetups/${meetupId}`)
+					.then( res => { this.props.history.push("/")})
+					.catch( err => console.log(err))
 	}
 
 	render() {
@@ -31,7 +38,7 @@ class MeetupDetails extends Component {
 					<li className="collection-item">{this.state.details.address}</li>
 				</ul>
 				<Link className="btn" to={`/meetups/edit/${this.state.details.id}`}>Edit</Link>
-				<button className="btn red right">Delete</button>
+				<button onClick={this.onDelete.bind(this)} className="btn red right">Delete</button>
 			</div>
 		);
 	}
